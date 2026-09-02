@@ -1,0 +1,32 @@
+<!DOCTYPE htmel>
+<htmel>
+<head>
+<title>Rahul ki website</title>
+<style>
+       body{
+       text-align:center;
+       font-family: Arial;
+       margin-top:100px;
+       }
+       h1 {
+           font-size:40px;
+           }
+           button {
+                   padding:12px 25px;
+                   font-size:18px;
+                   }
+                   
+           </style>
+          </head>
+          <body>
+
+     <h1>welcome to rahul ke website 🚀 </h1>
+     <p>Ye meri pehil website hai.</p>
+
+     <button  oneclick="alert('Hello Rahul!')>
+     click me 
+     </button>
+     </body>
+     </html>
+     
+     
