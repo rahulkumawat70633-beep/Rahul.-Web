@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rahul Study Hub</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f4f7fb;
+  color:#222;
+}
+header{
+  background:#173b7a;
+  color:white;
+  text-align:center;
+  padding:25px 15px;
+}
+header h1{margin:0 0 8px}
+nav{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+  padding:15px;
+  background:white;
+  box-shadow:0 2px 8px #ccc;
+}
+button{
+  border:0;
+  border-radius:8px;
+  padding:11px 16px;
+  cursor:pointer;
+  background:#2463d4;
+  color:white;
+  font-weight:bold;
+}
+button:hover{opacity:.85}
+
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+}
+.card{
+  background:white;
+  padding:20px;
+  margin:15px 0;
+  border-radius:12px;
+  box-shadow:0 2px 10px #ddd;
+}
+.section{display:none}
+.active{display:block}
+
+textarea,input{
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border:1px solid #ccc;
+  border-radius:8px;
+}
+
+#timer{
+  font-size:55px;
+  text-align:center;
+  font-weight:bold;
+  margin:25px;
+}
+
+.option{
+  display:block;
+  width:100%;
+  margin:8px 0;
+  text-align:left;
+  background:#eee;
+  color:#222;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>📚 Rahul Study Hub</h1>
+  <p>Apni padhai ko smart banao 🚀</p>
+</header>
+
+<nav>
+  <button onclick="show('home')">🏠 Home</button>
+  <button onclick="show('notes')">📚 Notes</button>
+  <button onclick="show('quiz')">📝 Quiz</button>
+  <button onclick="show('calculator')">🧮 Calculator</button>
+  <button onclick="show('timerBox')">⏱️ Timer</button>
+  <button onclick="show('planner')">📅 Planner</button>
+</nav>
+
+<div class="container">
+
+<!-- HOME -->
+<div id="home" class="section active">
+  <div class="card">
+    <h2>👋 Welcome!</h2>
+    <p>Ye tumhara personal Study Hub hai.</p>
+    <p>Upar diye buttons se alag-alag study programs chalao.</p>
+  </div>
+
+  <div class="card">
+    <h3>🎯 Study Features</h3>
+    <ul>
+      <li>Notes save karo</li>
+      <li>Quiz solve karo</li>
+      <li>Calculator use karo</li>
+      <li>Study timer chalao</li>
+      <li>Daily planner banao</li>
+    </ul>
+  </div>
+</div>
+
+<!-- NOTES -->
+<div id="notes" class="section">
+  <div class="card">
+    <h2>📚 My Notes</h2>
+    <textarea id="note" rows="10"
+      placeholder="Yahan apne notes likho..."></textarea>
+    <button onclick="saveNotes()">💾 Save Notes</button>
+    <button onclick="loadNotes()">📂 Load Notes</button>
+    <p id="noteMsg"></p>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="section">
+  <div class="card">
+    <h2>📝 General Knowledge Quiz</h2>
+
+    <h3>1. Bharat ki rajdhani kya hai?</h3>
+    <button class="option" onclick="answer(false)">Mumbai</button>
+    <button class="option" onclick="answer(true)">New Delhi</button>
+    <button class="option" onclick="answer(false)">Jaipur</button>
+
+    <h3>2. Bharat ka rashtriya pashu kya hai?</h3>
+    <button class="option" onclick="answer(true)">Tiger</button>
+    <button class="option" onclick="answer(false)">Lion</button>
+    <button class="option" onclick="answer(false)">Elephant</button>
+
+    <h3>3. 10 × 5 = ?</h3>
+    <button class="option" onclick="answer(false)">40</button>
+    <button class="option" onclick="answer(true)">50</button>
+    <button class="option" onclick="answer(false)">60</button>
+
+    <h3 id="score">Score: 0</h3>
+  </div>
+</div>
+
+<!-- CALCULATOR -->
+<div id="calculator" class="section">
+  <div class="card">
+    <h2>🧮 Calculator</h2>
+    <input id="calc" type="text" placeholder="Example: 25+10*2">
+    <button onclick="calculate()">Calculate</button>
+    <h2 id="result">Result: </h2>
+  </div>
+</div>
+
+<!-- TIMER -->
+<div id="timerBox" class="section">
+  <div class="card">
+    <h2>⏱️ Study Timer</h2>
+
+    <div id="timer">25:00</div>
+
+    <button onclick="startTimer()">▶ Start</button>
+    <button onclick="pauseTimer()">⏸ Pause</button>
+    <button onclick="resetTimer()">🔄 Reset</button>
+  </div>
+</div>
+
+<!-- PLANNER -->
+<div id="planner" class="section">
+  <div class="card">
+    <h2>📅 Study Planner</h2>
+
+    <input id="task" placeholder="Aaj kya padhna hai?">
+
+    <button onclick="addTask()">➕ Add Task</button>
+
+    <ul id="taskList"></ul>
+  </div>
+</div>
+
+</div>
+
+<script>
+
+// PAGE CHANGE
+function show(id){
+  document.querySelectorAll('.section')
+    .forEach(x => x.classList.remove('active'));
+
+  document.getElementById(id)
+    .classList.add('active');
+}
+
+// NOTES
+function saveNotes(){
+  localStorage.setItem("rahulNotes",
+    document.getElementById("note").value);
+
+  document.getElementById("noteMsg").innerText =
+    "✅ Notes save ho gaye!";
+}
+
+function loadNotes(){
+  document.getElementById("note").value =
+    localStorage.getItem("rahulNotes") || "";
+
+  document.getElementById("noteMsg").innerText =
+    "📂 Notes load ho gaye!";
+}
+
+// QUIZ
+let score=0;
+
+function answer(correct){
+  if(correct) score++;
+
+  document.getElementById("score").innerText =
+    "Score: " + score;
+}
+
+// CALCULATOR
+function calculate(){
+  let value=document.getElementById("calc").value;
+
+  try{
+    document.getElementById("result").innerText =
+      "Result: " + Function("return " + value)();
+  }
+  catch{
+    document.getElementById("result").innerText =
+      "Result: Invalid calculation";
+  }
+}
+
+// TIMER
+let seconds=1500;
+let timerInterval=null;
+
+function updateTimer(){
+  let min=Math.floor(seconds/60);
+  let sec=seconds%60;
+
+  document.getElementById("timer").innerText =
+    String(min).padStart(2,"0") + ":" +
+    String(sec).padStart(2,"0");
+}
+
+function startTimer(){
+  if(timerInterval) return;
+
+  timerInterval=setInterval(function(){
+    if(seconds>0){
+      seconds--;
+      updateTimer();
+    }else{
+      clearInterval(timerInterval);
+      timerInterval=null;
+      alert("⏰ Study session complete!");
+    }
+  },1000);
+}
+
+function pauseTimer(){
+  clearInterval(timerInterval);
+  timerInterval=null;
+}
+
+function resetTimer(){
+  pauseTimer();
+  seconds=1500;
+  updateTimer();
+}
+
+// PLANNER
+function addTask(){
+  let task=document.getElementById("task").value;
+
+  if(task.trim()=="") return;
+
+  let li=document.createElement("li");
+  li.innerHTML=task +
+    ' <button onclick="this.parentElement.remove()">❌</button>';
+
+  document.getElementById("taskList").appendChild(li);
+
+  document.getElementById("task").value="";
+}
+
+</script>
+
+</body>
+</html>
